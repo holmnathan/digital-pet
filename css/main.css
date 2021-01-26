@@ -1,0 +1,10 @@
+.selected-action {
+  color: white;
+  background: red;
+}
+
+nav li {
+  display: inline;
+  padding: 1em;
+  border: solid black 1px;
+}
