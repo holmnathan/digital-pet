@@ -1,5 +1,11 @@
 "use strict";
 
+// ----- User Interface -----
+// Get the DOM elements needed to run game.
+const userInterface = {
+  petScreen: document.getElementById("pet")
+}
+
 // ----- Player Controls -----
 // Define how the user will interact with the app:
 // - The player can cycle through a list of game actions, using the "Left" and "Right" buttons,
@@ -77,6 +83,13 @@ const handleButton = (e) => {
       handleAction(playerControls.actions[playerControls.selectedAction].getAttribute("id"));
   }
 }
+// ----- Handle Pet User Interface -----
+// Display the pet's response on screen.
+const handlePetUi = (petClass) => {
+  const currentClass = userInterface.petScreen.classList;
+  userInterface.petScreen.classList.remove(currentClass);
+  userInterface.petScreen.classList.add(petClass);
+}
 
 // Highlight the first item in actions menu when page loads.
 toggleSelectionClass();
@@ -86,3 +99,4 @@ for (let button of playerControls.buttons) {
   button.addEventListener("click",handleButton);
 }
 
+// ----------------------------------------------------------------------------

@@ -8,3 +8,9 @@ nav li {
   padding: 1em;
   border: solid black 1px;
 }
+
+#pet {
+  width: 200px;
+  height: 200px;
+  background: gray;
+}
