@@ -83,9 +83,11 @@ const handleAction = (action) => {
   switch (action) {
     case "feed":
       pet.adjustStat("hunger","increase");
+      pet.adjustStat("hunger","increase");
       printRating("hunger");
       break;
     case "discipline":
+      pet.adjustStat("discipline","increase");
       pet.adjustStat("discipline","increase");
       pet.adjustStat("happiness","decrease");
       printRating("discipline");
@@ -93,9 +95,13 @@ const handleAction = (action) => {
       break;
     case "play":
       pet.adjustStat("happiness","increase");
+      pet.adjustStat("happiness","increase");
+      pet.adjustStat("discipline","decrease");
+      printRating("discipline");
       printRating("happiness");
       break;
     case "medicine":
+      pet.adjustStat("health","increase");
       pet.adjustStat("health","increase");
       pet.adjustStat("discipline","decrease");
       printRating("discipline");
@@ -156,18 +162,14 @@ const pet = {
     health: {name: "Health", value: 5, max: 10}
   },
   adjustStat: function(statName, operator) {
-    if (this.needs[statName].value > 0 && this.needs[statName].value < this.needs[statName].max) {
-    switch (operator) {
-      case "increase":
-        this.needs[statName].value += 1;
-        break;
-      case "decrease":
-        this.needs[statName].value -= 1;
-      }
-      console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
+    if (operator === "increase" && this.needs[statName].value < this.needs[statName].max) {
+      this.needs[statName].value += 1;
+    } else if (operator === "decrease" && this.needs[statName].value > 0) {
+      this.needs[statName].value -= 1;
+    }
+    console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
     }   
   }
-}
 
 // ----------------------------------------------------------------------------
 
