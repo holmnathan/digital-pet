@@ -48,20 +48,23 @@ const toggleSelectionClass = () => {
 }
 
 // ----- Handle Action -----
-// Takes an action’s html "id" tag as a string and executes a matching function.
+// Takes a string and executes a matching function.
 const handleAction = (action) => {
   switch (action) {
     case "feed":
-      console.log("FEED");
+      pet.adjustStat("hunger","increase");
       break;
     case "discipline":
-      console.log("DISCIPLINE");
+      pet.adjustStat("discipline","increase");
       break;
     case "play":
-      console.log("PLAY");
+      pet.adjustStat("happiness","increase");
       break;
     case "medicine":
-      console.log("MEDICINE");
+      pet.adjustStat("health","increase");
+      break;
+    case "cleanup":
+      pet.adjustStat("hunger","decrease");
   }
 }
 
@@ -100,3 +103,30 @@ for (let button of playerControls.buttons) {
 }
 
 // ----------------------------------------------------------------------------
+
+const pet = {
+  stats: {
+    name: "",
+    age: 0,
+    lifeStage: 0,
+    lifeExpectancy: 0
+  },
+  needs: {
+    hunger: {value: 3, max: 10},
+    happiness: {value: 4, max: 10},
+    discipline: {value: 2, max: 10},
+    health: {value: 5, max: 10}
+  },
+  adjustStat: function(statName, operator) {
+    if (this.needs[statName].value > 0 && this.needs[statName].value < this.needs[statName].max) {
+    switch (operator) {
+      case "increase":
+        this.needs[statName].value += 1;
+        break;
+      case "decrease":
+        this.needs[statName].value -= 1;
+      }
+      console.log(this.needs["statName"], this.needs[statName].value);
+    }   
+  }
+}
