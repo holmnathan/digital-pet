@@ -109,12 +109,12 @@ const pet = {
     name: "",
     age: 0,
     lifeStage: 0,
-    lifeExpectancy: 0
+    lifeExpectancy: 50
   },
   needs: {
-    hunger: {value: 3, max: 10},
-    happiness: {value: 4, max: 10},
-    discipline: {value: 2, max: 10},
+    hunger: {value: 5, max: 10},
+    happiness: {value: 5, max: 10},
+    discipline: {value: 5, max: 10},
     health: {value: 5, max: 10}
   },
   adjustStat: function(statName, operator) {
@@ -130,3 +130,30 @@ const pet = {
     }   
   }
 }
+
+// ----------------------------------------------------------------------------
+
+const adjustLife = (operator, amount) => {
+  console.log(typeof pet.stats.lifeExpectancy);
+  if (operator === "increase") {
+      pet.stats.lifeExpectancy += amount;
+    } else if (operator === "decrease") {
+      pet.stats.lifeExpectancy -= amount;
+    }
+}
+
+const testbutton1 = document.createElement("button");
+const textText1 = document.createTextNode("Increase Life");
+const testbutton2 = document.createElement("button");
+const textText2 = document.createTextNode("Decrease Life");
+
+testbutton1.appendChild(textText1);
+testbutton2.appendChild(textText2);
+
+document.querySelector("body").appendChild(testbutton1);
+document.querySelector("body").appendChild(testbutton2);
+
+testbutton1.addEventListener("click", () => {adjustLife("increase", 3)});
+testbutton2.addEventListener("click", () => {adjustLife("decrease", 10)});
+
+const globalTime = setInterval(() => {if (pet.stats.age < pet.stats.lifeExpectancy) {console.log(pet.stats.age, pet.stats.lifeExpectancy); pet.stats.age += 1} else {clearInterval(globalTime); console.log("Game Over")}}, 1000);
