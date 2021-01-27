@@ -4,7 +4,8 @@
 // Get the DOM elements needed to run game.
 const userInterface = {
   petScreen: document.getElementById("pet"),
-  stats: document.getElementById("stats")
+  stats: document.getElementById("stats"),
+  alertMessage: document.getElementById("alert")
 }
 
 // ----- Player Controls -----
@@ -74,7 +75,7 @@ const printRating = (rating) => {
   console.log(`#stat-${rating}`)
   console.log(html);
   
-  html.querySelector("p").innerText = textNode;
+  html.querySelector("p").textContent = textNode;
 }
 
 // ----- Handle Action -----
@@ -191,6 +192,27 @@ const globalTimerLogic = () => {
     console.log("Game Over")
   }
 }
+
+const hideAlert = (e) => {
+  e.preventDefault;
+  userInterface.alertMessage.classList.add("hidden");
+}
+
+const showAlert = (alertType) => {
+  const title = userInterface.alertMessage.querySelector("header");
+  const message = userInterface.alertMessage.querySelector("p");
+  const button = userInterface.alertMessage.querySelector("button");
+  
+  title.textContent = alertType.title;
+  message.textContent = alertType.message;
+  
+  userInterface.alertMessage.classList.remove("hidden");
+  
+  button.addEventListener("click", hideAlert);
+  
+};
+
+showAlert({title: "Test", message: "Yes Please!"});
 
 const testbutton1 = document.createElement("button");
 const textText1 = document.createTextNode("Increase Life");
