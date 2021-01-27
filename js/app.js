@@ -3,7 +3,8 @@
 // ----- User Interface -----
 // Get the DOM elements needed to run game.
 const userInterface = {
-  petScreen: document.getElementById("pet")
+  petScreen: document.getElementById("pet"),
+  stats: document.getElementById("stats")
 }
 
 // ----- Player Controls -----
@@ -47,21 +48,58 @@ const toggleSelectionClass = () => {
   playerControls.actions[playerControls.selectedAction].classList.toggle("selected-action");
 }
 
+const generateStars = (rating, max) => {
+  console.log(`rating: ${rating}, max: ${max}`);
+  let output = "";
+  const emptyStar = ( max - rating );
+  let i = 0;
+  
+  for (i = 0; i < rating; i += 1) {
+    output += "★"
+  }
+  if (emptyStar > 0) {
+    for (i = 0; i < emptyStar; i += 1) {
+      output += "☆"
+    }
+  }
+  
+  return output;
+}
+
+const printRating = (rating) => {
+  const ratingValue = pet.needs[rating];
+  const textNode = generateStars(ratingValue.value, ratingValue.max);
+  const html = document.getElementById(`stat-${rating}`);
+  
+  console.log(`#stat-${rating}`)
+  console.log(html);
+  
+  html.querySelector("p").innerText = textNode;
+}
+
 // ----- Handle Action -----
 // Takes a string and executes a matching function.
 const handleAction = (action) => {
   switch (action) {
     case "feed":
       pet.adjustStat("hunger","increase");
+      printRating("hunger");
       break;
     case "discipline":
       pet.adjustStat("discipline","increase");
+      pet.adjustStat("happiness","decrease");
+      printRating("discipline");
+      printRating("happiness");
       break;
     case "play":
       pet.adjustStat("happiness","increase");
+      printRating("happiness");
       break;
     case "medicine":
       pet.adjustStat("health","increase");
+      pet.adjustStat("discipline","decrease");
+      printRating("discipline");
+      printRating("health");
       break;
     case "cleanup":
       pet.adjustStat("hunger","decrease");
@@ -112,10 +150,10 @@ const pet = {
     lifeExpectancy: 50
   },
   needs: {
-    hunger: {value: 5, max: 10},
-    happiness: {value: 5, max: 10},
-    discipline: {value: 5, max: 10},
-    health: {value: 5, max: 10}
+    hunger: {name: "Hunger", value: 5, max: 10},
+    happiness: {name: "Happiness", value: 5, max: 10},
+    discipline: {name: "Discipline", value: 5, max: 10},
+    health: {name: "Health", value: 5, max: 10}
   },
   adjustStat: function(statName, operator) {
     if (this.needs[statName].value > 0 && this.needs[statName].value < this.needs[statName].max) {
@@ -126,7 +164,7 @@ const pet = {
       case "decrease":
         this.needs[statName].value -= 1;
       }
-      console.log(this.needs["statName"], this.needs[statName].value);
+      console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
     }   
   }
 }
@@ -142,18 +180,36 @@ const adjustLife = (operator, amount) => {
     }
 }
 
+const globalTimerLogic = () => {
+  if (pet.stats.age < pet.stats.lifeExpectancy) {
+    console.log(pet.stats.age, pet.stats.lifeExpectancy);
+    pet.stats.age += 1
+  } else {
+    clearInterval(globalTime);
+    console.log("Game Over")
+  }
+}
+
 const testbutton1 = document.createElement("button");
 const textText1 = document.createTextNode("Increase Life");
 const testbutton2 = document.createElement("button");
 const textText2 = document.createTextNode("Decrease Life");
+const testbutton3 = document.createElement("button");
+const textText3 = document.createTextNode("Pause");
+const testbutton4 = document.createElement("button");
+const textText4 = document.createTextNode("Resume");
 
 testbutton1.appendChild(textText1);
 testbutton2.appendChild(textText2);
+testbutton3.appendChild(textText3);
+testbutton4.appendChild(textText4);
 
 document.querySelector("body").appendChild(testbutton1);
 document.querySelector("body").appendChild(testbutton2);
+document.querySelector("body").appendChild(testbutton3);
+document.querySelector("body").appendChild(testbutton4);
+
+const globalTime = setInterval(globalTimerLogic, 1000);
 
 testbutton1.addEventListener("click", () => {adjustLife("increase", 3)});
 testbutton2.addEventListener("click", () => {adjustLife("decrease", 10)});
-
-const globalTime = setInterval(() => {if (pet.stats.age < pet.stats.lifeExpectancy) {console.log(pet.stats.age, pet.stats.lifeExpectancy); pet.stats.age += 1} else {clearInterval(globalTime); console.log("Game Over")}}, 1000);
