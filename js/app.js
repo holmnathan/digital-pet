@@ -1,63 +1,141 @@
 "use strict";
 
-// ----- User Interface -----
-// Get the DOM elements needed to run game.
-const userInterface = {
-  petScreen: document.getElementById("pet"),
-  stats: document.getElementById("stats"),
-  alertMessage: document.getElementById("alert")
+// Define Object Prototypes
+// ============================================================================
+
+// ----- Alert Message -----
+function eventMessagePrototype(title, message) {
+  this.title = title;
+  this.message = message;
 }
 
-// ----- Player Controls -----
+// ----- Game Action Prototype -----
+function actionPrototype(domElement) {
+  this.domElement = domElement;
+  this.dataset = domElement.dataset;
+  // The corresponding rating the action changes:
+  this.change = this.dataset.change;
+  // Maximum score:
+  this.max = parseInt(this.dataset.max);
+  // Generate initial value at half the maximum score:
+  this.score = Math.floor(this.max / 2); 
+  // How frequently to decrease the score:
+  this.depletionRate = parseInt(this.dataset.depletionRate); 
+  // A list of corresponding alert messages:
+  this.messages = [];
+  // Adjust action score by amount:
+  this.adjustScore = function(amount) { 
+    this.score = handleSumLimit(this.score, amount, 0, this.max);
+    console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
+  },
+  // Print the action score to DOM:
+  this.print = function() { 
+    const textNode = generateStars(this.score, this.max);
+    const html = document.getElementById(`stat-${this.change}`);
+    
+    html.querySelector("p").textContent = textNode;
+  }
+}
+
+// ----- Pet Prototype -----
+function petPrototype(name) {
+  this.name = name;
+  this.age = 0;
+  // Generate a random life expectancy above 18 to 100:
+  this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
+  this.adjustLife = (amount) => {
+    this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100);
+    console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
+  }
+}
+
+// Global Variables
+// ============================================================================
+
+const gameInterface = {
+  screen: document.getElementById("pet"), // Where the pet will be rendered
+  actions: document.getElementById("game-actions"), // Game actions
+  controls: document.getElementById("game-controller"), // Game Controls
+  stats: document.getElementById("stats"), // Game Stats
+  alert: document.getElementById("alert") // Alert Messages
+}
+
+// ----- Game Controls -----
 // Define how the user will interact with the app:
 // - The player can cycle through a list of game actions, using the "Left" and "Right" buttons,
 // - The player can see the currently highlighted action from the list,
 // - The player can execute a selected action by pressing the "Select" button.
-
-const playerControls = {
-  actions: document.querySelectorAll("#actions li"), // Get game actions
-  buttons: document.querySelectorAll("#game-controller button"), // Get buttons
-  selectedAction: 0 // Current user selection
-}
-
-// ----- Select Previous -----
-// Return the previous item index from an array (Start over when last item is reached)
-const selectPrevious = (index, array) => {
-  if ( index === 0 ) {
-    index = ( array.length - 1 );
-  } else {
-    index -= 1;
+const gameControl = {
+  // Get buttons
+  buttons: document.querySelectorAll("#game-controller button"),
+  // Current action sel:
+  selectedIndex: 0,
+  selectNext: function() {
+    if ( this.selectedIndex === gameAction.length - 1 ) {
+      this.selectedIndex = 0;
+    } else {
+      this.selectedIndex += 1;
+    }
+  },
+  selectPrevious: function() {
+    if ( this.selectedIndex === 0 ) {
+      this.selectedIndex = ( gameAction.length - 1 );
+    } else {
+      this.selectedIndex -= 1;
+    }
   }
-  return index;
-}
+ }
+ 
+ // ----- Pet -----
+ const gamePet = new petPrototype("Bob");
+ 
+ // Initialize a gameAction array.
+ const gameAction = [];
 
-// ----- Select Next -----
-// Return the next item index from an array (Start over when last item is reached)
-const selectNext = (index, array) => {
-  if ( index === array.length - 1 ) {
-    index = 0;
-  } else {
-    index += 1;
+// Functions
+// ============================================================================
+
+// ----- Handle Sum Limits -----
+// Test the sum of two values against an upper and lower limit,
+// Return the sum amount if within range.
+const handleSumLimit = (sum1, sum2, min, max) => {
+  let output = sum1 + sum2;
+  if (output > max) {
+    output = max;
+  } else if (output < min) {
+    output = min;
   }
-  return index;
+  return output;
 }
 
-// ----- Toggle Selection Class -----
+// ----- Get Actions -----
+// Instantiate a list of all the game actions and push to the global "gameAction" object
+const getActions = () => {
+  for (let action of gameInterface.actions.children) {
+    gameAction.push(new actionPrototype(action));
+  }
+}
+
+getActions();
+
+// ----- Toggle selected Class -----
 // Highlight the selected action by toggling it's "selected-action" class
 // Class is styled in main.css
-const toggleSelectionClass = () => {
-  playerControls.actions[playerControls.selectedAction].classList.toggle("selected-action");
+const toggleselectedClass = () => {
+  gameAction[gameControl.selectedIndex].domElement.classList.toggle("selected-action");
 }
 
+// ----- Generate Star Rating -----
+// Returns a text string of stars
 const generateStars = (rating, max) => {
-  console.log(`rating: ${rating}, max: ${max}`);
-  let output = "";
   const emptyStar = ( max - rating );
+  let output = "";
   let i = 0;
   
-  for (i = 0; i < rating; i += 1) {
+  for (let i = 0; i < rating; i += 1) {
     output += "★"
   }
+  
   if (emptyStar > 0) {
     for (i = 0; i < emptyStar; i += 1) {
       output += "☆"
@@ -67,121 +145,70 @@ const generateStars = (rating, max) => {
   return output;
 }
 
-const printRating = (rating) => {
-  const ratingValue = pet.needs[rating];
-  const textNode = generateStars(ratingValue.value, ratingValue.max);
-  const html = document.getElementById(`stat-${rating}`);
-  
-  console.log(`#stat-${rating}`)
-  console.log(html);
-  
-  html.querySelector("p").textContent = textNode;
-}
-
-// ----- Handle Action -----
-// Takes a string and executes a matching function.
-const handleAction = (action) => {
-  switch (action) {
-    case "feed":
-      pet.adjustStat("hunger","increase");
-      pet.adjustStat("hunger","increase");
-      printRating("hunger");
-      break;
-    case "discipline":
-      pet.adjustStat("discipline","increase");
-      pet.adjustStat("discipline","increase");
-      pet.adjustStat("happiness","decrease");
-      printRating("discipline");
-      printRating("happiness");
-      break;
-    case "play":
-      pet.adjustStat("happiness","increase");
-      pet.adjustStat("happiness","increase");
-      pet.adjustStat("discipline","decrease");
-      printRating("discipline");
-      printRating("happiness");
-      break;
-    case "medicine":
-      pet.adjustStat("health","increase");
-      pet.adjustStat("health","increase");
-      pet.adjustStat("discipline","decrease");
-      printRating("discipline");
-      printRating("health");
-      break;
-    case "cleanup":
-      pet.adjustStat("hunger","decrease");
-  }
-}
-
 // ----- Handle Button -----
 // Toggles selected game item classes in CSS and assigns button actions.
 const handleButton = (e) => {
   switch (e.target.value) {
     case "left":
-      toggleSelectionClass();
-      playerControls.selectedAction = selectPrevious(playerControls.selectedAction, playerControls.actions);
-      toggleSelectionClass();
+      toggleselectedClass();
+      gameControl.selectPrevious();
+      toggleselectedClass();
+      // currentselected[1].classList.toggle("selected-action");
       break;
     case "right":
-      toggleSelectionClass();
-      playerControls.selectedAction = selectNext(playerControls.selectedAction, playerControls.actions);
-      toggleSelectionClass();
+      toggleselectedClass();
+      gameControl.selectNext();
+      toggleselectedClass();
       break;
     case "select":
-      handleAction(playerControls.actions[playerControls.selectedAction].getAttribute("id"));
+      gameAction[gameControl.selectedIndex].adjustScore(1);
+      gameAction[gameControl.selectedIndex].print();
   }
 }
+
 // ----- Handle Pet User Interface -----
 // Display the pet's response on screen.
 const handlePetUi = (petClass) => {
-  const currentClass = userInterface.petScreen.classList;
-  userInterface.petScreen.classList.remove(currentClass);
-  userInterface.petScreen.classList.add(petClass);
+  const currentClass = gameInterface.petScreen.classList;
+  gameInterface.petScreen.classList.remove(currentClass);
+  gameInterface.petScreen.classList.add(petClass);
 }
 
+// Run Code
+// ============================================================================
+
 // Highlight the first item in actions menu when page loads.
-toggleSelectionClass();
+toggleselectedClass();
 
 // Assign Event Listeners to game controls
-for (let button of playerControls.buttons) {
+for (let button of gameControl.buttons) {
   button.addEventListener("click",handleButton);
 }
 
-// ----------------------------------------------------------------------------
-
-const pet = {
-  stats: {
-    name: "",
-    age: 0,
-    lifeStage: 0,
-    lifeExpectancy: 50
-  },
-  needs: {
-    hunger: {name: "Hunger", value: 5, max: 10},
-    happiness: {name: "Happiness", value: 5, max: 10},
-    discipline: {name: "Discipline", value: 5, max: 10},
-    health: {name: "Health", value: 5, max: 10}
-  },
-  adjustStat: function(statName, operator) {
-    if (operator === "increase" && this.needs[statName].value < this.needs[statName].max) {
-      this.needs[statName].value += 1;
-    } else if (operator === "decrease" && this.needs[statName].value > 0) {
-      this.needs[statName].value -= 1;
-    }
-    console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
-    }   
-  }
+// const pet = {
+//   stats: {
+//     name: "",
+//     age: 0,
+//     lifeStage: 0,
+//     lifeExpectancy: 50
+//   },
+//   needs: {
+//     hunger: {name: "Hunger", value: 5, max: 10},
+//     happiness: {name: "Happiness", value: 5, max: 10},
+//     discipline: {name: "Discipline", value: 5, max: 10},
+//     health: {name: "Health", value: 5, max: 10}
+//   },
+//   adjustStat: function(statName, operator) {
+//     if (operator === "increase" && this.needs[statName].value < this.needs[statName].max) {
+//       this.needs[statName].value += 1;
+//     } else if (operator === "decrease" && this.needs[statName].value > 0) {
+//       this.needs[statName].value -= 1;
+//     }
+//     console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
+//     }   
+//   }
 
 // ----------------------------------------------------------------------------
-
-const adjustLife = (operator, amount) => {
-  console.log(typeof pet.stats.lifeExpectancy);
-  if (operator === "increase") {
-      pet.stats.lifeExpectancy += amount;
-    } else if (operator === "decrease") {
-      pet.stats.lifeExpectancy -= amount;
-    }
-}
 
 const globalTimerLogic = () => {
   if (pet.stats.age < pet.stats.lifeExpectancy) {
@@ -195,24 +222,22 @@ const globalTimerLogic = () => {
 
 const hideAlert = (e) => {
   e.preventDefault;
-  userInterface.alertMessage.classList.add("hidden");
+  gameInterface.alertMessage.classList.add("hidden");
 }
 
 const showAlert = (alertType) => {
-  const title = userInterface.alertMessage.querySelector("header");
-  const message = userInterface.alertMessage.querySelector("p");
-  const button = userInterface.alertMessage.querySelector("button");
+  const title = gameInterface.alertMessage.querySelector("header");
+  const message = gameInterface.alertMessage.querySelector("p");
+  const button = gameInterface.alertMessage.querySelector("button");
   
   title.textContent = alertType.title;
   message.textContent = alertType.message;
   
-  userInterface.alertMessage.classList.remove("hidden");
+  gameInterface.alertMessage.classList.remove("hidden");
   
   button.addEventListener("click", hideAlert);
   
 };
-
-showAlert({title: "Test", message: "Yes Please!"});
 
 const testbutton1 = document.createElement("button");
 const textText1 = document.createTextNode("Increase Life");
@@ -233,7 +258,7 @@ document.querySelector("body").appendChild(testbutton2);
 document.querySelector("body").appendChild(testbutton3);
 document.querySelector("body").appendChild(testbutton4);
 
-const globalTime = setInterval(globalTimerLogic, 1000);
+// const globalTime = setInterval(globalTimerLogic, 1000);
 
-testbutton1.addEventListener("click", () => {adjustLife("increase", 3)});
-testbutton2.addEventListener("click", () => {adjustLife("decrease", 10)});
+testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
+testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});

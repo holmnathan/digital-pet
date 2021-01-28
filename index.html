@@ -9,16 +9,16 @@
   <body>
     <div class="test" id="pet"></div>
     <nav id="game-navigation">
-      <ul id="actions">
-        <li id="feed">Feed</li>
-        <li id="discipline">Discipline</li>
-        <li id="play">Play</li>
-        <li id="medicine">Medicine</li>
+      <ul id = "game-actions">
+        <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" >Feed</li>
+        <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="1">Discipline</li>
+        <li id="play" data-change="happiness" data-max="10" data-depletion-rate="1">Play</li>
+        <li id="medicine" data-change="health" data-max="10" data-depletion-rate="1">Medicine</li>
       </ul>
       <section id="game-controller">
-        <button value="left">Left</button>
+        <button data-operator="subtract" value="left">Left</button>
         <button value="select">Select</button>
-        <button value="right">Right</button>
+        <button data-operator="add" value="right">Right</button>
       </section>
     </nav>
     <aside>
