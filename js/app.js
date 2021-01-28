@@ -23,11 +23,13 @@ function actionPrototype(domElement) {
   this.depletionRate = parseInt(this.dataset.depletionRate); 
   // A list of corresponding alert messages:
   this.messages = [];
+  this.high = this.dataset.high;
+  this.low = this.dataset.low;
   // Adjust action score by amount:
   this.adjustScore = function(amount) { 
     this.score = handleSumLimit(this.score, amount, 0, this.max, false);
-    console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
-  },
+    // console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
+  };
   // Print the action score to DOM:
   this.print = function() { 
     const textNode = generateStars(this.score, this.max);
@@ -36,10 +38,15 @@ function actionPrototype(domElement) {
     html.querySelector("p").textContent = textNode;
   },
   this.selectToggle = function() {
-    console.log(`selectToggle: ${this.change}, classList: ${this.domElement.classList}`)
+    // console.log(`selectToggle: ${this.change}, classList: ${this.domElement.classList}`)
     this.domElement.classList.toggle("selected-action");
+  },
+  this.isNeeded = function() {
+    this.need = Math.round(this.score / this.max * 2);
+    console.log(`This Need: ${this.need}`)
+    return this.need;
+    }
   }
-}
 
 // ----- Pet Prototype -----
 function petPrototype(name) {
@@ -47,10 +54,21 @@ function petPrototype(name) {
   this.age = 0;
   // Generate a random life expectancy above 18 to 100:
   this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
+  this.moodTypes = ["sad", "neutral", "happy"];
+  this.mood = 1;
+  this.setMood = function() {
+    const happiness = findAction("happiness", gameAction);
+    const calc = Math.round(happiness.score / happiness.max * ( this.moodTypes.length -1));
+    // console.log (`calc: ${happiness}`);
+    console.log(happiness);
+    this.mood = calc;
+    console.log(`Happiness Score: ${calc}, Mood: ${this.moodTypes[this.mood]}`);
+  }
   this.adjustLife = (amount) => {
     this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100, false);
     console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
-  }
+  },
+  this.needs = [];
 }
 
 // Global Variables
@@ -98,9 +116,18 @@ const handleSumLimit = (sum1, sum2, min, max, loop) => {
   } else if (output < min) {
     output = loop === true ? max : min;
   }
-  console.log(`handleSumLimit:\n${sum1} + ${sum2}, Minimum: ${min} & Maximum: ${max}, Loop: ${loop}\nOutput Value: ${output}`);
+  // console.log(`handleSumLimit:\n${sum1} + ${sum2}, Minimum: ${min} & Maximum: ${max}, Loop: ${loop}\nOutput Value: ${output}`);
   
   return output;
+}
+
+
+
+const handleAction = (action, pet) => {
+  const needIndex = action.isNeeded();
+  console.log(`${action}Current Need Index: ${needIndex}`)
+  
+  if (pet.needs.indexOf(needIndex))
 }
 
 // ----- Get Actions -----
@@ -129,7 +156,7 @@ const generateStars = (rating, max) => {
       output += "☆"
     }
   }
-  
+  // console.log(`Stars Generated: ${output}`)
   return output;
 }
 
@@ -151,19 +178,36 @@ const handleButton = (e) => {
     case "select":
       gameAction[gameControl.selectedIndex].adjustScore(1);
       gameAction[gameControl.selectedIndex].print();
+      // gamePet.setMood();
+      for (let action of gameAction) {
+        handleAction(action, gamePet);
+      }
+      console.log(`Current Needs: ${gamePet.needs}`)
   }
 }
 
 // ----- Handle Pet User Interface -----
 // Display the pet's response on screen.
 const handlePetUi = (petClass) => {
-  const currentClass = gameInterface.petScreen.classList;
-  gameInterface.petScreen.classList.remove(currentClass);
-  gameInterface.petScreen.classList.add(petClass);
+    gameInterface.screen.textContent = gamePet.moodTypes[gamePet.mood];
+  // const currentClass = gameInterface.screen.classList;
+  // gameInterface.screen.classList.remove(currentClass);
+  // gameInterface.screen.classList.add(petClass);
 }
+
+const findAction = (action, arrayName) => {
+  const index = arrayName.map((action) => {return action.change}).indexOf(action);
+    console.log(`findAction index: ${index}`);
+    return arrayName[index];
+  }
 
 // Run Code
 // ============================================================================
+
+const happy = document.getElementById("sprite-happy");
+const sad = document.getElementById("sprite-sad");
+
+console.log(parseInt(window.getComputedStyle(happy).getPropertyValue("animation-duration"))* 1000);
 
 // Highlight the first item in actions menu when page loads.
 gameAction[0].selectToggle();
@@ -209,7 +253,7 @@ const textText1 = document.createTextNode("Increase Life");
 const testbutton2 = document.createElement("button");
 const textText2 = document.createTextNode("Decrease Life");
 const testbutton3 = document.createElement("button");
-const textText3 = document.createTextNode("Pause");
+const textText3 = document.createTextNode("Decrease Value");
 const testbutton4 = document.createElement("button");
 const textText4 = document.createTextNode("Resume");
 
@@ -227,3 +271,7 @@ document.querySelector("body").appendChild(testbutton4);
 
 testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
 testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
+testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1); gameAction[gameControl.selectedIndex].print(); for (let action of gameAction) {
+  handleAction(action, gamePet);
+}
+console.log(gamePet.needs)});

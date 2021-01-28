@@ -2,18 +2,28 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/css/main.css" />
-    <script src="js/app.js" defer></script>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="./js/app.js" defer></script>
     <title>Digital Pet</title>
   </head>
   <body>
-    <div class="test" id="pet"></div>
+    <div class="test" id="pet">
+      <img id="sprite-happy" class="selected" src="./sprites/happy.png" alt=""/>
+      <img id="sprite-hungry" src="./sprites/hungry.png" alt=""/>
+      <img id="sprite-lazy" src="./sprites/lazy.png" alt=""/>
+      <img id="sprite-medicated" src="./sprites/medicated.png" alt=""/>
+      <img id="sprite-neutral" src="./sprites/neutral.png" alt=""/>
+      <img id="sprite-poop" src="./sprites/poop.png" alt=""/>
+      <img id="sprite-sad" src="./sprites/sad.png" alt=""/>
+      <img id="sprite-sick" src="./sprites/sick.png" alt=""/>
+      <img id="sprite-strict" src="./sprites/strict.png" alt=""/>
+    </div>
     <nav id="game-navigation">
       <ul id = "game-actions">
-        <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" >Feed</li>
-        <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="1">Discipline</li>
-        <li id="play" data-change="happiness" data-max="10" data-depletion-rate="1">Play</li>
-        <li id="medicine" data-change="health" data-max="10" data-depletion-rate="1">Medicine</li>
+        <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" data-high="poop" data-low="hungry">Feed</li>
+        <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="1" data-high="strict" data-low="lazy">Discipline</li>
+        <li id="play" data-change="happiness" data-max="10" data-depletion-rate="1" data-high="happy" data-low="sad">Play</li>
+        <li id="medicine" data-change="health" data-max="10" data-depletion-rate="1" data-high="medicated" data-low="sick">Medicine</li>
       </ul>
       <section id="game-controller">
         <button data-operator="subtract" value="left">Left</button>

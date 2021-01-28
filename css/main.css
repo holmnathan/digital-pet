@@ -19,6 +19,28 @@ nav li {
   background: gray;
 }
 
+#pet img {
+  display: none;
+  position: absolute;
+}
+
+#pet .selected {
+  display: initial;
+  animation-name: image-pulse;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes image-pulse {
+  0% {opacity: 0%;}
+  50% {opacity: 100%;}
+  100% {opacity: 0%;}
+}
+
 .hidden {
   display: none;
+}
+
+.happy {
+  background
 }
