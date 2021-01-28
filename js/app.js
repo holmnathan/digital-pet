@@ -176,29 +176,6 @@ for (let button of gameControl.buttons) {
   button.addEventListener("click",handleButton);
 }
 
-// const pet = {
-//   stats: {
-//     name: "",
-//     age: 0,
-//     lifeStage: 0,
-//     lifeExpectancy: 50
-//   },
-//   needs: {
-//     hunger: {name: "Hunger", value: 5, max: 10},
-//     happiness: {name: "Happiness", value: 5, max: 10},
-//     discipline: {name: "Discipline", value: 5, max: 10},
-//     health: {name: "Health", value: 5, max: 10}
-//   },
-//   adjustStat: function(statName, operator) {
-//     if (operator === "increase" && this.needs[statName].value < this.needs[statName].max) {
-//       this.needs[statName].value += 1;
-//     } else if (operator === "decrease" && this.needs[statName].value > 0) {
-//       this.needs[statName].value -= 1;
-//     }
-//     console.log(this.needs[statName].name, generateStars(this.needs[statName].value, this.needs[statName].max));
-//     }   
-//   }
-
 // ----------------------------------------------------------------------------
 
 const globalTimerLogic = () => {
