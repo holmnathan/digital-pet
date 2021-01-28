@@ -34,6 +34,10 @@ function actionPrototype(domElement) {
     const html = document.getElementById(`stat-${this.change}`);
     
     html.querySelector("p").textContent = textNode;
+  },
+  this.selectToggle = function() {
+    console.log(`selectToggle: ${this.change}, classList: ${this.domElement.classList}`)
+    this.domElement.classList.toggle("selected-action");
   }
 }
 
@@ -109,13 +113,6 @@ const getActions = () => {
 
 getActions();
 
-// ----- Toggle selected Class -----
-// Highlight the selected action by toggling it's "selected-action" class
-// Class is styled in main.css
-const toggleselectedClass = () => {
-  gameAction[gameControl.selectedIndex].domElement.classList.toggle("selected-action");
-}
-
 // ----- Generate Star Rating -----
 // Returns a text string of stars
 const generateStars = (rating, max) => {
@@ -141,15 +138,15 @@ const generateStars = (rating, max) => {
 const handleButton = (e) => {
   switch (e.target.value) {
     case "left":
-      toggleselectedClass();
+    console.log(`Left Button: ${gameAction[gameControl.selectedIndex]}`)
+      gameAction[gameControl.selectedIndex].selectToggle();
       gameControl.adjustIndex(-1);
-      toggleselectedClass();
-      // currentselected[1].classList.toggle("selected-action");
+      gameAction[gameControl.selectedIndex].selectToggle();
       break;
     case "right":
-      toggleselectedClass();
+      gameAction[gameControl.selectedIndex].selectToggle();
       gameControl.adjustIndex(1);
-      toggleselectedClass();
+      gameAction[gameControl.selectedIndex].selectToggle();
       break;
     case "select":
       gameAction[gameControl.selectedIndex].adjustScore(1);
@@ -169,7 +166,7 @@ const handlePetUi = (petClass) => {
 // ============================================================================
 
 // Highlight the first item in actions menu when page loads.
-toggleselectedClass();
+gameAction[0].selectToggle();
 
 // Assign Event Listeners to game controls
 for (let button of gameControl.buttons) {
