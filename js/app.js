@@ -25,7 +25,7 @@ function actionPrototype(domElement) {
   this.messages = [];
   // Adjust action score by amount:
   this.adjustScore = function(amount) { 
-    this.score = handleSumLimit(this.score, amount, 0, this.max);
+    this.score = handleSumLimit(this.score, amount, 0, this.max, false);
     console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
   },
   // Print the action score to DOM:
@@ -44,7 +44,7 @@ function petPrototype(name) {
   // Generate a random life expectancy above 18 to 100:
   this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
   this.adjustLife = (amount) => {
-    this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100);
+    this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100, false);
     console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
   }
 }
@@ -70,19 +70,8 @@ const gameControl = {
   buttons: document.querySelectorAll("#game-controller button"),
   // Current action sel:
   selectedIndex: 0,
-  selectNext: function() {
-    if ( this.selectedIndex === gameAction.length - 1 ) {
-      this.selectedIndex = 0;
-    } else {
-      this.selectedIndex += 1;
-    }
-  },
-  selectPrevious: function() {
-    if ( this.selectedIndex === 0 ) {
-      this.selectedIndex = ( gameAction.length - 1 );
-    } else {
-      this.selectedIndex -= 1;
-    }
+  adjustIndex: function(amount) {
+    this.selectedIndex = handleSumLimit(this.selectedIndex, amount, 0, ( gameAction.length - 1 ), true);
   }
  }
  
@@ -98,13 +87,15 @@ const gameControl = {
 // ----- Handle Sum Limits -----
 // Test the sum of two values against an upper and lower limit,
 // Return the sum amount if within range.
-const handleSumLimit = (sum1, sum2, min, max) => {
+const handleSumLimit = (sum1, sum2, min, max, loop) => {
   let output = sum1 + sum2;
   if (output > max) {
-    output = max;
+    output = loop === true ? min : max;
   } else if (output < min) {
-    output = min;
+    output = loop === true ? max : min;
   }
+  console.log(`handleSumLimit:\n${sum1} + ${sum2}, Minimum: ${min} & Maximum: ${max}, Loop: ${loop}\nOutput Value: ${output}`);
+  
   return output;
 }
 
@@ -151,13 +142,13 @@ const handleButton = (e) => {
   switch (e.target.value) {
     case "left":
       toggleselectedClass();
-      gameControl.selectPrevious();
+      gameControl.adjustIndex(-1);
       toggleselectedClass();
       // currentselected[1].classList.toggle("selected-action");
       break;
     case "right":
       toggleselectedClass();
-      gameControl.selectNext();
+      gameControl.adjustIndex(1);
       toggleselectedClass();
       break;
     case "select":
