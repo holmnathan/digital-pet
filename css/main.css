@@ -1,22 +1,26 @@
-body {
-  background: lightgray;
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  color: black;
 }
 
-.selected-action {
-  color: white;
-  background: red;
+* button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  color: black;
+  font-family: sans-serif;
 }
 
-nav li {
-  display: inline;
-  padding: 1em;
-  border: solid black 1px;
+* li {
+  list-style: none;
 }
 
 #pet {
   width: 200px;
   height: 200px;
-  background: gray;
 }
 
 #pet img {
@@ -39,4 +43,90 @@ nav li {
 
 .hidden {
   display: none;
+}
+
+body {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+h3 {
+  padding: .5em 0;
+}
+
+main {
+  background: darkblue;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border-radius: 1em;
+  padding: 3em 4em;
+}
+
+#game-play {
+  background: darkcyan;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1.5em ;
+  padding: 2em;
+  border-radius: 4em 4em 100% 100%;
+}
+
+aside {
+  padding: 30px;
+  background: white;
+  margin-left: 1.5em;
+  border-radius: 1em;
+}
+
+#screen {
+  background: yellowgreen;
+  padding: .5em;
+  border-radius: 1em;
+}
+
+#game-actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+#game-actions li {
+  display: inline;
+}
+
+#game-actions ul {
+  background: red;
+}
+
+#game-actions img {
+  width: 2em;
+  height: 2em;
+  padding: .25em;
+}
+
+.selected-action {
+  border-bottom: solid 3px black;
+}
+
+#game-controller {
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: 1em;
+  overflow: hidden;
+  border: black 1px solid;
+  margin-top: 1em;
+}
+
+#game-controller button {
+  padding: 2em;
+  background: gray;
+  border-right: black 1px solid;
+}
+
+#game-controller button:last-of-type{
+  border-right: none;
 }

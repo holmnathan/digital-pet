@@ -7,47 +7,53 @@
     <title>Digital Pet</title>
   </head>
   <body>
-    <div class="test" id="pet">
-      <img id="sprite-happy" class="selected" src="./sprites/happy.png" alt=""/>
-      <img id="sprite-hungry" src="./sprites/hungry.png" alt=""/>
-      <img id="sprite-lazy" src="./sprites/lazy.png" alt=""/>
-      <img id="sprite-medicated" src="./sprites/medicated.png" alt=""/>
-      <img id="sprite-neutral" src="./sprites/neutral.png" alt=""/>
-      <img id="sprite-poop" src="./sprites/poop.png" alt=""/>
-      <img id="sprite-sad" src="./sprites/sad.png" alt=""/>
-      <img id="sprite-sick" src="./sprites/sick.png" alt=""/>
-      <img id="sprite-strict" src="./sprites/strict.png" alt=""/>
-      <img id="sprite-discipline" src="./sprites/discipline.png" alt=""/>
-      <img id="sprite-play" src="./sprites/play.png" alt=""/>
-      <img id="sprite-medicine" src="./sprites/medicine.png" alt=""/>
-      <img id="sprite-feed" src="./sprites/feed.png" alt=""/>
-    </div>
-    <nav id="game-navigation">
-      <ul id = "game-actions">
-        <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" data-high="bladder" data-low="hungry">Feed</li>
-        <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="1.3" data-high="strict" data-low="lazy">Discipline</li>
-        <li id="play" data-change="happiness" data-max="10" data-depletion-rate="1.8" data-high="happy" data-low="sad">Play</li>
-        <li id="medicine" data-change="health" data-max="10" data-depletion-rate="3" data-high="medicated" data-low="sick">Medicine</li>
-      </ul>
-      <section id="game-controller">
-        <button data-operator="subtract" value="left">Left</button>
-        <button value="select">Select</button>
-        <button data-operator="add" value="right">Right</button>
+    <main>
+      <section id="game-play">
+        <section id="screen">
+          <div class="test" id="pet">
+            <img id="sprite-happy" class="selected" src="./assets/sprites/happy.png" alt=""/>
+            <img id="sprite-hungry" src="./assets/sprites/hungry.png" alt=""/>
+            <img id="sprite-lazy" src="./assets/sprites/lazy.png" alt=""/>
+            <img id="sprite-medicated" src="./assets/sprites/medicated.png" alt=""/>
+            <img id="sprite-neutral" src="./assets/sprites/neutral.png" alt=""/>
+            <img id="sprite-poop" src="./assets/sprites/poop.png" alt=""/>
+            <img id="sprite-sad" src="./assets/sprites/sad.png" alt=""/>
+            <img id="sprite-sick" src="./assets/sprites/sick.png" alt=""/>
+            <img id="sprite-strict" src="./assets/sprites/strict.png" alt=""/>
+            <img id="sprite-discipline" src="./assets/sprites/discipline.png" alt=""/>
+            <img id="sprite-play" src="./assets/sprites/play.png" alt=""/>
+            <img id="sprite-medicine" src="./assets/sprites/medicine.png" alt=""/>
+            <img id="sprite-feed" src="./assets/sprites/feed.png" alt=""/>
+          </div>
+          <nav id="game-navigation">
+            <ul id = "game-actions">
+              <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" data-high="bladder" data-low="hungry"><img alt="" src="./assets/icons/burger.svg" /></li>
+              <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="1.3" data-high="strict" data-low="lazy"><img alt="" src="./assets/icons/emoji-sad.svg" /></li>
+              <li id="play" data-change="happiness" data-max="10" data-depletion-rate="1.8" data-high="happy" data-low="sad"><img alt="" src="./assets/icons/console-game.svg" /></li>
+              <li id="medicine" data-change="health" data-max="10" data-depletion-rate="3" data-high="medicated" data-low="sick"><img alt="" src="./assets/icons/syringe.svg" /></li>
+            </ul>
+          </nav>
+        </section>
+          <section id="game-controller">
+            <button data-operator="subtract" value="left">Left</button>
+            <button value="select">Select</button>
+            <button data-operator="add" value="right">Right</button>
+          </section>
       </section>
-    </nav>
-    <aside>
-      <ul id="stats">
-        <li id="stat-hunger"><h3>Hunger</h3><p>★★★★★☆☆☆☆☆</p></li>
-        <li id="stat-discipline"><h3>Discipline</h3><p>★★★★★☆☆☆☆☆</p></li>
-        <li id="stat-happiness"><h3>Happiness</h3><p>★★★★★☆☆☆☆☆</p></li>
-        <li id="stat-health"><h3>Health</h3><p>★★★★★☆☆☆☆☆</p></li>
-      </ul>
-    </aside>
-    <div class="hidden" role="alert" id="alert">
-      <header>Alert</header>
-      <p>Message</p>
-      <aside></aside>
-      <button>Okay</button>
-    </div>
+        <aside>
+          <ul id="stats">
+            <li id="stat-hunger"><h3>Hunger</h3><p>★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-discipline"><h3>Discipline</h3><p>★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-happiness"><h3>Happiness</h3><p>★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-health"><h3>Health</h3><p>★★★★★☆☆☆☆☆</p></li>
+          </ul>
+        </aside>
+        <div class="hidden" role="alert" id="alert">
+          <header>Alert</header>
+          <p>Message</p>
+          <aside></aside>
+          <button>Okay</button>
+        </div>
+    </main>
   </body>
 </html>

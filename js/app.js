@@ -291,31 +291,31 @@ const showAlert = (alertType) => {
   
 };
 
-const testbutton1 = document.createElement("button");
-const textText1 = document.createTextNode("Increase Life");
-const testbutton2 = document.createElement("button");
-const textText2 = document.createTextNode("Decrease Life");
-const testbutton3 = document.createElement("button");
-const textText3 = document.createTextNode("Decrease Value");
-const testbutton4 = document.createElement("button");
-const textText4 = document.createTextNode("Resume");
-
-testbutton1.appendChild(textText1);
-testbutton2.appendChild(textText2);
-testbutton3.appendChild(textText3);
-testbutton4.appendChild(textText4);
-
-document.querySelector("body").appendChild(testbutton1);
-document.querySelector("body").appendChild(testbutton2);
-document.querySelector("body").appendChild(testbutton3);
-document.querySelector("body").appendChild(testbutton4);
-
-// const globalTime = setInterval(globalTimerLogic, 1000);
-
-testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
-testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
-testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1);
-});
+// const testbutton1 = document.createElement("button");
+// const textText1 = document.createTextNode("Increase Life");
+// const testbutton2 = document.createElement("button");
+// const textText2 = document.createTextNode("Decrease Life");
+// const testbutton3 = document.createElement("button");
+// const textText3 = document.createTextNode("Decrease Value");
+// const testbutton4 = document.createElement("button");
+// const textText4 = document.createTextNode("Resume");
+// 
+// testbutton1.appendChild(textText1);
+// testbutton2.appendChild(textText2);
+// testbutton3.appendChild(textText3);
+// testbutton4.appendChild(textText4);
+// 
+// document.querySelector("body").appendChild(testbutton1);
+// document.querySelector("body").appendChild(testbutton2);
+// document.querySelector("body").appendChild(testbutton3);
+// document.querySelector("body").appendChild(testbutton4);
+// 
+// // const globalTime = setInterval(globalTimerLogic, 1000);
+// 
+// testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
+// testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
+// testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1);
+// });
 
 let healthTimer = setInterval(function() {findAction("health", gameAction).adjustScore(-1)}, findAction("health", gameAction).depletionRate * 30000);
 let happinessTimer = setInterval(function() {findAction("happiness", gameAction).adjustScore(-1)}, findAction("happiness", gameAction).depletionRate * 30000);
