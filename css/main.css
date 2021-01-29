@@ -41,16 +41,19 @@
   100% {opacity: 0%;}
 }
 
-.hidden {
-  display: none;
+.alert {
+}
+.hide {
+  opacity: 75%;
 }
 
 body {
   display: flex;
-  /* flex-direction: column; */
-  /* align-items: center; */
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   font-family: sans-serif;
+  min-height:100vh;
 }
 
 h3 {
@@ -61,7 +64,7 @@ main {
   background: darkblue;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   border-radius: 1em;
   padding: 3em 4em;
 }
@@ -77,10 +80,10 @@ main {
   border-radius: 4em 4em 100% 100%;
 }
 
-aside {
+.side-panel {
   padding: 30px;
   background: white;
-  margin-left: 1.5em;
+  margin: 1.5em 0 0 1.5em;
   border-radius: 1em;
 }
 

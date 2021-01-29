@@ -23,9 +23,8 @@ function actionPrototype(domElement) {
   // How frequently to decrease the score:
   this.depletionRate = parseInt(this.dataset.depletionRate); 
   // A list of corresponding alert messages:
-  this.messages = [];
-  this.high = this.dataset.high;
-  this.low = this.dataset.low;
+  this.high = {name: this.dataset.high, messages: []};
+  this.low = {name: this.dataset.low, messages: []};
   // Print the action score to DOM:
   this.print = function() { 
     const textNode = generateStars(this.score, this.max);
@@ -38,6 +37,11 @@ function actionPrototype(domElement) {
     this.score = handleSumLimit(this.score, amount, 0, this.max, false);
     this.print();
     handlePetUi(`sprite-${this.name}`)
+    if (this.score === 3) {
+        this.alert("low")
+      } else if (this.score === 7) {
+        this.alert("high")
+      }
     // console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
   };
   this.selectToggle = function() {
@@ -49,13 +53,21 @@ function actionPrototype(domElement) {
     console.log(`Is Needed Value (0–2): ${calcIndex}`);
       switch (calcIndex) {
         case 0:
-          return this.low;
+          return this.low.name;
         case 1:
           break;
         case 2:
-          return this.high
+          return this.high.name
       }
     };
+    this.alert = function(value) {
+      console.log(this)
+      const randomInt = Math.floor(Math.random() * this[value].messages.length);
+      const message = this[value].messages[randomInt];
+      
+      gameInterface.alert.querySelector("header").textContent = message.title;
+      gameInterface.alert.querySelector("p").textContent = message.message;
+    }
   }
 
 // ----- Pet Prototype -----
@@ -89,6 +101,7 @@ const gameInterface = {
   actions: document.getElementById("game-actions"), // Game actions
   controls: document.getElementById("game-controller"), // Game Controls
   stats: document.getElementById("stats"), // Game Stats
+  info: document.getElementById("info"),
   alert: document.getElementById("alert") // Alert Messages
 }
 
@@ -321,3 +334,11 @@ let healthTimer = setInterval(function() {findAction("health", gameAction).adjus
 let happinessTimer = setInterval(function() {findAction("happiness", gameAction).adjustScore(-1)}, findAction("happiness", gameAction).depletionRate * 30000);
 let disciplineTimer = setInterval(function() {findAction("discipline", gameAction).adjustScore(-1)}, findAction("discipline", gameAction).depletionRate * 30000);
 let hungerTimer = setInterval(function() {findAction("hunger", gameAction).adjustScore(-1)}, findAction("hunger", gameAction).depletionRate * 30000);
+
+gameAction[0].high.messages.push(new eventMessagePrototype("High 1", "Message 1"));
+gameAction[0].high.messages.push(new eventMessagePrototype("High 3", "Message 3"));
+gameAction[0].high.messages.push(new eventMessagePrototype("High 2", "Message 2"));
+
+gameAction[0].low.messages.push(new eventMessagePrototype("low 1", "Message 1"));
+gameAction[0].low.messages.push(new eventMessagePrototype("low 3", "Message 3"));
+gameAction[0].low.messages.push(new eventMessagePrototype("low 2", "Message 2"));
