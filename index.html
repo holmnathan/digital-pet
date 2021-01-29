@@ -69,15 +69,29 @@
       </main>
     </template>
     <template>
-      <main class="welcome">
+      <main id="pre-game" class="no-game welcome">
         <header>
           <h1>Digital Pet!</h1>
         </header>
         <section>
           <h2>What’s your new pets name?</h2>
-          <section id="form-elements">
+          <section class="form-elements">
             <input id="input-name" size="10" type="text"/>
-            <button id="submit-name" type="submit">Let’s Play!</button>
+            <button id="start-game" type="submit">Let’s Play!</button>
+          </section>
+        </section>
+      </main>
+    </template>
+    <template>
+      <main id="game-over" class="no-game">
+        <header>
+          <h1>Game Over</h1>
+        </header>
+        <section>
+          <img alt="Gravestone" src="./assets/sprites/dead.svg" />
+          <h2>Your pet lived a good life.</h2>
+          <section class="form-elements">
+            <button id="start-over" type="submit">Start Over…</button>
           </section>
         </section>
       </main>

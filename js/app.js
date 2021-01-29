@@ -7,6 +7,24 @@
   //   tooStrict
   // }
   
+  const gameDomTemplates = document.querySelectorAll("template");
+  
+  const welcome = gameDomTemplates[1].content.querySelector("main");
+  const gamer = gameDomTemplates[0].content.querySelector("main")
+  const gameOver = gameDomTemplates[2].content.querySelector("main")
+  
+  
+  const templateChange = (newValue, oldValue) => {
+    
+    if (!oldValue) {
+      document.querySelector("body").appendChild(newValue);
+    } else {
+      console.log(oldValue, newValue)
+      document.querySelector("body").replaceChild(newValue, oldValue);
+    }
+  }
+  
+  templateChange(welcome);
   
   const game = {
     start: function (petName) {
@@ -70,6 +88,9 @@
         
       };
       this.timer = setInterval( () => this.adjustScore(-1), 10000 * this.depletionRate);
+      this.action = function(value) {
+        
+      }
     }
   
   
@@ -149,8 +170,6 @@
   }
   
   getActions();
-  
-  console.log("GAME ACTIONS:",gameAction)
   
   // ----- Generate Star Rating -----
   // Returns a text string of stars
@@ -249,7 +268,10 @@
       gamePet.print();
     } else {
       clearInterval(globalTime);
-      console.log("Game Over")
+      for (let action of gameAction) {
+        clearInterval(action.timer);
+      }
+      game.stop(gamePet.name);
     }
   }
   
@@ -272,31 +294,35 @@
     
   };
   
-  // const testbutton1 = document.createElement("button");
-  // const textText1 = document.createTextNode("Increase Life");
-  // const testbutton2 = document.createElement("button");
-  // const textText2 = document.createTextNode("Decrease Life");
-  // const testbutton3 = document.createElement("button");
-  // const textText3 = document.createTextNode("Decrease Value");
-  // const testbutton4 = document.createElement("button");
-  // const textText4 = document.createTextNode("Resume");
-  // 
-  // testbutton1.appendChild(textText1);
-  // testbutton2.appendChild(textText2);
-  // testbutton3.appendChild(textText3);
-  // testbutton4.appendChild(textText4);
-  // 
-  // document.querySelector("body").appendChild(testbutton1);
-  // document.querySelector("body").appendChild(testbutton2);
-  // document.querySelector("body").appendChild(testbutton3);
-  // document.querySelector("body").appendChild(testbutton4);
-  // 
+  const debugControl = {
+    div: document.createElement("div"),
+    buttons: [
+      {element: document.createElement("button"), textNode: document.createTextNode("Increase Life"), action: function() {gamePet.adjustLife(10); console.log(`DEBUG: Adjusted life: ${gamePet.lifeExpectancy}`)}},
+      {element: document.createElement("button"), textNode: document.createTextNode("Decrease Life"), action: function() {gamePet.adjustLife(-10); console.log(`DEBUG: Adjusted life: ${gamePet.lifeExpectancy}`)}},
+      {element: document.createElement("button"), textNode: document.createTextNode("Decrease Value"), action: function() {gameAction[gameControl.selectedIndex].adjustScore(-1); ; console.log(`DEBUG: Adjusted ${gameAction[gameControl.selectedIndex].change} score: ${gameAction[gameControl.selectedIndex].score}`)}},
+      // {element: document.createElement("button"), textNode: document.createTextNode("Resume")},
+    ],
+    setDebug: function() {
+      for (let debug of debugControl.buttons) {
+        debug.element.appendChild(debug.textNode);
+        if (debug.action) {
+          debug.element.addEventListener("click", debug.action);
+        }
+        debugControl.div.appendChild(debug.element);
+        debugControl.div.classList.add("debug");
+      }
+      
+      document.querySelector("body").appendChild(debugControl.div);
+    }
+  }
+  
+  debugControl.setDebug();
+  
+  console.log(debugControl.div)
+  
   const globalTime = setInterval(globalTimerLogic, 5000);
   // 
-  // testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
-  // testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
-  // testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1);
-  // });
+  
   gameAction[0].high.messages.push(new eventMessagePrototype("Too Full", `Click okay for your ${gamePet.name} to use the bathroom.`));
   gameAction[0].low.messages.push(new eventMessagePrototype("Too Hungry!", `${gamePet.name} needs to eat to stay alive!` ));
   
@@ -310,41 +336,32 @@
   gameAction[3].low.messages.push(new eventMessagePrototype("Sick", `${gamePet.name} needs medication.`));
   
 },
-  stop: function() {
+  stop: function(petName) {
+    console.log("Game Over")
+    templateChange(gameOver, gamer);
     
+    const title = `${petName} lived a good life!`;
+    const output = document.getElementById("game-over").querySelector("h2");
+    const startOver = document.getElementById("start-over");
+    
+    output.textContent = title;
+    
+    startOver.addEventListener("click", () => {templateChange(welcome, gameOver)});
   }
 }
 
-const gameDomTemplates = document.querySelectorAll("template");
-
-const templateChange = (newValue, oldValue) => {
-  
-  if (!oldValue) {
-    document.querySelector("body").appendChild(newValue);
-  } else {
-    console.log(oldValue, newValue)
-    document.querySelector("body").replaceChild(oldValue, newValue);
-  }
-}
-
-const welcome = gameDomTemplates[1].content.querySelector("main");
-const gamer = gameDomTemplates[0].content.querySelector("main")
-
-templateChange(welcome);
+console.log(gameOver);
 
 const startGame = (e) => {
   e.preventDefault()
   
   const inputName = document.getElementById("input-name").value;
   
-  // templateChange(gameDomTemplates[0].content.querySelector("main"), gameDomTemplates[1].content.querySelector("main"));
-  // 
-  
   document.querySelector("body").replaceChild(gamer, welcome);
   
   game.start(inputName)
 }
-const buttonStart = document.getElementById("submit-name");
 
+const buttonStart = document.getElementById("start-game");
 buttonStart.addEventListener("click", startGame);
 
