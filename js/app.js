@@ -25,26 +25,34 @@ function actionPrototype(domElement) {
   this.messages = [];
   this.high = this.dataset.high;
   this.low = this.dataset.low;
-  // Adjust action score by amount:
-  this.adjustScore = function(amount) { 
-    this.score = handleSumLimit(this.score, amount, 0, this.max, false);
-    // console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
-  };
   // Print the action score to DOM:
   this.print = function() { 
     const textNode = generateStars(this.score, this.max);
     const html = document.getElementById(`stat-${this.change}`);
     
     html.querySelector("p").textContent = textNode;
-  },
+  };
+  // Adjust action score by amount:
+  this.adjustScore = function(amount) { 
+    this.score = handleSumLimit(this.score, amount, 0, this.max, false);
+    this.print();
+    // console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
+  };
   this.selectToggle = function() {
     // console.log(`selectToggle: ${this.change}, classList: ${this.domElement.classList}`)
     this.domElement.classList.toggle("selected-action");
-  },
+  };
   this.isNeeded = function() {
-    this.need = Math.round(this.score / this.max * 2);
-    console.log(`This Need: ${this.need}`)
-    return this.need;
+    const calcIndex = Math.round(this.score / this.max * 2);
+    console.log(`Is Needed Value (0–2): ${calcIndex}`);
+      switch (calcIndex) {
+        case 0:
+          return this.low;
+        case 1:
+          break;
+        case 2:
+          return this.high
+      }
     }
   }
 
@@ -54,16 +62,16 @@ function petPrototype(name) {
   this.age = 0;
   // Generate a random life expectancy above 18 to 100:
   this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
-  this.moodTypes = ["sad", "neutral", "happy"];
-  this.mood = 1;
-  this.setMood = function() {
-    const happiness = findAction("happiness", gameAction);
-    const calc = Math.round(happiness.score / happiness.max * ( this.moodTypes.length -1));
-    // console.log (`calc: ${happiness}`);
-    console.log(happiness);
-    this.mood = calc;
-    console.log(`Happiness Score: ${calc}, Mood: ${this.moodTypes[this.mood]}`);
-  }
+  // this.moodTypes = ["sad", "neutral", "happy"];
+  // this.mood = 1;
+  // this.setMood = function() {
+  //   const happiness = findAction("happiness", gameAction);
+  //   const calc = Math.round(happiness.score / happiness.max * ( this.moodTypes.length -1));
+  //   // console.log (`calc: ${happiness}`);
+  //   console.log(happiness);
+  //   this.mood = calc;
+  //   console.log(`Happiness Score: ${calc}, Mood: ${this.moodTypes[this.mood]}`);
+  // }
   this.adjustLife = (amount) => {
     this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100, false);
     console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
@@ -121,14 +129,42 @@ const handleSumLimit = (sum1, sum2, min, max, loop) => {
   return output;
 }
 
-
-
-const handleAction = (action, pet) => {
-  const needIndex = action.isNeeded();
-  console.log(`${action}Current Need Index: ${needIndex}`)
-  
-  if (pet.needs.indexOf(needIndex))
-}
+// const handleAction = (actionsArray, action) => {
+//   console.log(`Action: ${action}`)
+//   if (action) {
+//     switch (action) {
+//       case "bladder":
+//       console.log(findAction("health", actionsArray))
+//       findAction("health", actionsArray).adjustScore(-1);
+//         findAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "hunger":
+//         findAction("health", actionsArray).adjustScore(-1);
+//         afindAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "strict":
+//         findAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "lazy":
+//         findAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "sad":
+//         findAction("health", actionsArray).adjustScore(-1);
+//         break
+//       case "happy":
+//         findAction("discipline", actionsArray).adjustScore(-1);
+//         break
+//       case "strict":
+//         findAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "sick":
+//         findAction("happiness", actionsArray).adjustScore(-1);
+//         break
+//       case "medicated":
+//         findAction("discipline", actionsArray).adjustScore(-1);
+//     }
+//   }
+// }
 
 // ----- Get Actions -----
 // Instantiate a list of all the game actions and push to the global "gameAction" object
@@ -139,6 +175,8 @@ const getActions = () => {
 }
 
 getActions();
+
+console.log(gameAction)
 
 // ----- Generate Star Rating -----
 // Returns a text string of stars
@@ -177,12 +215,10 @@ const handleButton = (e) => {
       break;
     case "select":
       gameAction[gameControl.selectedIndex].adjustScore(1);
-      gameAction[gameControl.selectedIndex].print();
       // gamePet.setMood();
       for (let action of gameAction) {
-        handleAction(action, gamePet);
+        handleAction(gameAction, action.isNeeded());
       }
-      console.log(`Current Needs: ${gamePet.needs}`)
   }
 }
 
@@ -197,7 +233,7 @@ const handlePetUi = (petClass) => {
 
 const findAction = (action, arrayName) => {
   const index = arrayName.map((action) => {return action.change}).indexOf(action);
-    console.log(`findAction index: ${index}`);
+    // console.log(`findAction index: ${index}`);
     return arrayName[index];
   }
 
@@ -271,7 +307,12 @@ document.querySelector("body").appendChild(testbutton4);
 
 testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
 testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
-testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1); gameAction[gameControl.selectedIndex].print(); for (let action of gameAction) {
-  handleAction(action, gamePet);
+testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1); for (let action of gameAction) {
+  handleAction(gameAction, action.isNeeded());
 }
-console.log(gamePet.needs)});
+});
+
+const healthTimer = setInterval(function() {findAction("health", gameAction).adjustScore(-1)}, findAction("health", gameAction).depletionRate * 30000);
+const happinessTimer = setInterval(function() {findAction("happiness", gameAction).adjustScore(-1)}, findAction("happiness", gameAction).depletionRate * 30000);
+const disciplineTimer = setInterval(function() {findAction("discipline", gameAction).adjustScore(-1)}, findAction("discipline", gameAction).depletionRate * 30000);
+const hungerTimer = setInterval(function() {findAction("hunger", gameAction).adjustScore(-1)}, findAction("hunger", gameAction).depletionRate * 30000);
