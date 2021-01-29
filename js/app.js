@@ -9,7 +9,7 @@
   
   
   const game = {
-    start: function () {
+    start: function (petName) {
   // ----- Alert Message -----
   function eventMessagePrototype(title, message) {
     this.title = title;
@@ -73,8 +73,8 @@
   function petPrototype(name) {
     this.name = name;
     this.age = 0;
-    // Generate a random life expectancy above 18 to 100:
-    this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
+    // Generate a random life expectancy above 50 to 100:
+    this.lifeExpectancy = Math.floor(Math.random() * (100-50) + 50 );
     this.print = function() {
       gameInterface.info.querySelector("#pet-name p").textContent = this.name;
       gameInterface.info.querySelector("#pet-age p").textContent = this.age;
@@ -113,7 +113,7 @@
    }
    
    // ----- Pet -----
-   const gamePet = new petPrototype("Bob");
+   const gamePet = new petPrototype(petName);
    
    // Initialize a gameAction array.
    const gameAction = [];
@@ -306,4 +306,21 @@
   }
 }
 
-game.start();
+// game.start();
+
+const startGame = (e) => {
+  e.preventDefault()
+  
+  const inputName = document.getElementById("input-name").value;
+  document.querySelector("body").replaceChild(templates[0].content.querySelector("main"), content);
+  
+  game.start(inputName)
+}
+
+const templates = document.querySelectorAll("template");
+const content = templates[1].content.querySelector("main");
+
+document.querySelector("body").appendChild(content);
+const buttonStart = document.getElementById("submit-name");
+
+buttonStart.addEventListener("click", startGame);

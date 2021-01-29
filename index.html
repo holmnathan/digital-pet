@@ -7,63 +7,81 @@
     <title>Digital Pet</title>
   </head>
   <body>
-    <main>
-      <section id="left">
-      <h1>Digital Pet!</h1>
-      <section id="game-play">
-        <div>
-        <section id="screen">
-          <div class="test" id="pet">
-            <img id="sprite-normal" class="default" src="./assets/sprites/normal.svg" alt=""/>
-            <img id="sprite-happy" src="./assets/sprites/happy.svg" alt=""/>
-            <img id="sprite-hungry" src="./assets/sprites/hungry.svg" alt=""/>
-            <img id="sprite-evil" src="./assets/sprites/evil.svg" alt=""/>
-            <img id="sprite-high" src="./assets/sprites/high.svg" alt=""/>
-            <img id="sprite-toilet" src="./assets/sprites/toilet.svg" alt=""/>
-            <img id="sprite-sad" src="./assets/sprites/sad.svg" alt=""/>
-            <img id="sprite-sick" src="./assets/sprites/sick.svg" alt=""/>
-            <img id="sprite-dead" src="./assets/sprites/dead.svg" alt=""/>
-          </div>
-          <nav id="game-navigation">
-            <ul id = "game-actions">
-              <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" data-high="toilet" data-low="hungry"><img alt="" src="./assets/icons/burger.svg" /></li>
-              <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="2" data-high="evil" data-low="high"><img alt="" src="./assets/icons/sad.svg" /></li>
-              <li id="play" data-change="happiness" data-max="10" data-depletion-rate="3" data-high="happy" data-low="sad"><img alt="" src="./assets/icons/console-game.svg" /></li>
-              <li id="medicine" data-change="health" data-max="10" data-depletion-rate="3" data-high="high" data-low="sick"><img alt="" src="./assets/icons/syringe.svg" /></li>
-            </ul>
-          </nav>
-        </section>
-          <section id="game-controller">
-            <button id="button-left" data-operator="subtract" value="left"></button>
-            <button id="button-select" value="select"></button>
-            <button id="button-right" data-operator="add" value="right"></button>
+    <template>
+      <main>
+        <section id="left">
+        <h1>Digital Pet!</h1>
+        <section id="game-play">
+          <div>
+          <section id="screen">
+            <div class="test" id="pet">
+              <img id="sprite-normal" class="default" src="./assets/sprites/normal.svg" alt=""/>
+              <img id="sprite-happy" src="./assets/sprites/happy.svg" alt=""/>
+              <img id="sprite-hungry" src="./assets/sprites/hungry.svg" alt=""/>
+              <img id="sprite-evil" src="./assets/sprites/evil.svg" alt=""/>
+              <img id="sprite-high" src="./assets/sprites/high.svg" alt=""/>
+              <img id="sprite-toilet" src="./assets/sprites/toilet.svg" alt=""/>
+              <img id="sprite-sad" src="./assets/sprites/sad.svg" alt=""/>
+              <img id="sprite-sick" src="./assets/sprites/sick.svg" alt=""/>
+              <img id="sprite-dead" src="./assets/sprites/dead.svg" alt=""/>
+            </div>
+            <nav id="game-navigation">
+              <ul id = "game-actions">
+                <li id="feed" data-change="hunger" data-max="10"  data-depletion-rate="1" data-high="toilet" data-low="hungry"><img alt="" src="./assets/icons/burger.svg" /></li>
+                <li id="discipline" data-change="discipline" data-max="10" data-depletion-rate="2" data-high="evil" data-low="high"><img alt="" src="./assets/icons/sad.svg" /></li>
+                <li id="play" data-change="happiness" data-max="10" data-depletion-rate="3" data-high="happy" data-low="sad"><img alt="" src="./assets/icons/console-game.svg" /></li>
+                <li id="medicine" data-change="health" data-max="10" data-depletion-rate="3" data-high="high" data-low="sick"><img alt="" src="./assets/icons/syringe.svg" /></li>
+              </ul>
+            </nav>
           </section>
-        </div>
-      </section>
-      </section>
-        <aside>
-          <section class="side-panel" id="stats">
-            <h2>Pet’s Needs:</h2>
-          <ul  class="statistic">
-            <li id="stat-hunger"><h3>Hunger</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-discipline"><h3>Discipline</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-happiness"><h3>Happiness</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-health"><h3>Health</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+            <section id="game-controller">
+              <button id="button-left" data-operator="subtract" value="left"></button>
+              <button id="button-select" value="select"></button>
+              <button id="button-right" data-operator="add" value="right"></button>
+            </section>
+          </div>
+        </section>
+        </section>
+          <aside>
+            <section class="side-panel" id="stats">
+              <h2>Pet’s Needs:</h2>
+            <ul  class="statistic">
+              <li id="stat-hunger"><h3>Hunger</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+              <li id="stat-discipline"><h3>Discipline</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+              <li id="stat-happiness"><h3>Happiness</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+              <li id="stat-health"><h3>Health</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+            </ul>
+            </section>
+            <section class="side-panel" id="info">
+              <h2>Your Pet:</h2>
+              <ul>
+              <li id="pet-name"><h3>Name:</h3><p></p></li>
+              <li id="pet-age"><h3>Age:</h3><p></p></li>
           </ul>
           </section>
-          <section class="side-panel" id="info">
-            <h2>Your Pet:</h2>
-            <ul>
-            <li id="pet-name"><h3>Name:</h3><p></p></li>
-            <li id="pet-age"><h3>Age:</h3><p></p></li>
-        </ul>
+          </aside>
+      </main>
+    </template>
+    <template>
+      <main class="welcome">
+        <header>
+          <h1>Digital Pet!</h1>
+        </header>
+        <section>
+          <h2>What’s your new pets name?</h2>
+          <section id="form-elements">
+            <input id="input-name" size="10" type="text"/>
+            <button id="submit-name" type="submit">Let’s Play!</button>
+          </section>
         </section>
-        </aside>
-    </main>
-    <div class="alert hide" role="alert" id="alert">
-      <header>Alert</header>
-      <p>Message</p>
-      <aside></aside>
-      <button>Okay</button>
-    </div>
+      </main>
+    </template>
+    <template>
+      <div class="alert hide" role="alert" id="alert">
+        <header>Alert</header>
+        <p>Message</p>
+        <aside></aside>
+        <button>Okay</button>
+      </div>
+    </template>
 </html>

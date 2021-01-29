@@ -7,6 +7,12 @@
   color: black;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 * button {
   padding: 0;
   margin: 0;
@@ -217,4 +223,44 @@ h3 {
 
 .star-rating {
   color: #C02997;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+}
+
+.welcome section {
+  background: #FFFFFF;
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.welcome input {
+  height: 2.25em;
+  width: 100%;
+  padding: .25em;
+  font-family: "Nanum Pen Script", cursive;
+  font-size: 24pt;
+  background-position: center;
+  background: #FFFFFF;
+  border-radius: 1em 0 0  1em;
+  border: 3px #C02997 solid;
+}
+
+.welcome #form-elements {
+  display: flex;
+  font-size: 24pt;
+}
+
+.welcome button {
+  width: 50%;
+  font-family: "Nanum Pen Script", cursive;
+  color: white;
+  height: 2.25em;
+  font-size: 24pt;
+  background: #C02997;
+  border: 3px #C02997 solid;
+  border-radius: 0 1em 1em 0;
 }
