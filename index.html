@@ -8,10 +8,13 @@
   </head>
   <body>
     <main>
+      <section id="left">
+      <h1>Digital Pet!</h1>
       <section id="game-play">
+        <div>
         <section id="screen">
           <div class="test" id="pet">
-            <img id="sprite-normal" class="selected" src="./assets/sprites/normal.svg" alt=""/>
+            <img id="sprite-normal" class="default" src="./assets/sprites/normal.svg" alt=""/>
             <img id="sprite-happy" src="./assets/sprites/happy.svg" alt=""/>
             <img id="sprite-hungry" src="./assets/sprites/hungry.svg" alt=""/>
             <img id="sprite-evil" src="./assets/sprites/evil.svg" alt=""/>
@@ -31,22 +34,25 @@
           </nav>
         </section>
           <section id="game-controller">
-            <button data-operator="subtract" value="left">Left</button>
-            <button value="select">Select</button>
-            <button data-operator="add" value="right">Right</button>
+            <button id="button-left" data-operator="subtract" value="left"></button>
+            <button id="button-select" value="select"></button>
+            <button id="button-right" data-operator="add" value="right"></button>
           </section>
+        </div>
+      </section>
       </section>
         <aside>
           <section class="side-panel" id="stats">
-          <ul>
-            <li id="stat-hunger"><h3>Hunger</h3><p>★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-discipline"><h3>Discipline</h3><p>★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-happiness"><h3>Happiness</h3><p>★★★★★☆☆☆☆☆</p></li>
-            <li id="stat-health"><h3>Health</h3><p>★★★★★☆☆☆☆☆</p></li>
+            <h2>Pet’s Needs:</h2>
+          <ul  class="statistic">
+            <li id="stat-hunger"><h3>Hunger</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-discipline"><h3>Discipline</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-happiness"><h3>Happiness</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
+            <li id="stat-health"><h3>Health</h3><p class="star-rating">★★★★★☆☆☆☆☆</p></li>
           </ul>
           </section>
           <section class="side-panel" id="info">
-            <h2>Your Pet</h2>
+            <h2>Your Pet:</h2>
             <ul>
             <li id="pet-name"><h3>Name:</h3><p></p></li>
             <li id="pet-age"><h3>Age:</h3><p></p></li>

@@ -56,18 +56,6 @@
       // console.log(`selectToggle: ${this.change}, classList: ${this.domElement.classList}`)
       this.domElement.classList.toggle("selected-action");
     };
-    this.isNeeded = function() {
-      const calcIndex = Math.round(this.score / this.max * 2);
-      console.log(`Is Needed Value (0–2): ${calcIndex}`);
-        switch (calcIndex) {
-          case 0:
-            return this.low.name;
-          case 1:
-            break;
-          case 2:
-            return this.high.name
-        }
-      };
       this.alert = function(value) {
         const randomInt = Math.floor(Math.random() * this[value].messages.length);
         const message = this[value].messages[randomInt];
@@ -75,10 +63,11 @@
         // gameInterface.alert.querySelector("header").textContent = message.title;
         // gameInterface.alert.querySelector("p").textContent = message.message;
         
-        handlePetUi(`sprite-${this[value].name}`)
+        handlePetUi.setFlag(`sprite-${this[value].name}`)
       };
       this.timer = setInterval( () => this.adjustScore(-1), 10000 * this.depletionRate);
     }
+  
   
   // ----- Pet Prototype -----
   function petPrototype(name) {
@@ -147,43 +136,6 @@
     return output;
   }
   
-  // const handleAction = (actionsArray, action) => {
-  //   console.log(`Action: ${action}`)
-  //   if (action) {
-  //     switch (action) {
-  //       case "bladder":
-  //       console.log(findAction("health", actionsArray))
-  //       findAction("health", actionsArray).adjustScore(-1);
-  //         findAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "hunger":
-  //         findAction("health", actionsArray).adjustScore(-1);
-  //         afindAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "strict":
-  //         findAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "lazy":
-  //         findAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "sad":
-  //         findAction("health", actionsArray).adjustScore(-1);
-  //         break
-  //       case "happy":
-  //         findAction("discipline", actionsArray).adjustScore(-1);
-  //         break
-  //       case "strict":
-  //         findAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "sick":
-  //         findAction("happiness", actionsArray).adjustScore(-1);
-  //         break
-  //       case "medicated":
-  //         findAction("discipline", actionsArray).adjustScore(-1);
-  //     }
-  //   }
-  // }
-  
   // ----- Get Actions -----
   // Instantiate a list of all the game actions and push to the global "gameAction" object
   const getActions = () => {
@@ -237,21 +189,27 @@
     }
   }
   
-  let testTimer;
-  
   // ----- Handle Pet User Interface -----
   // Display the pet's response on screen.
-  const handlePetUi = (actionName) => {
+  const handlePetUi = {
+    defaultImage: gameInterface.screen.querySelector(".default"),
+    setFlag: function(actionName) {
+      const currentImage = gameInterface.screen.querySelector(".selected") ? gameInterface.screen.querySelector(".selected") : null;
       // gameInterface.screen.textContent = gamePet.moodTypes[gamePet.mood];
-      clearTimeout(testTimer);
-    const currentSelection = gameInterface.screen.querySelector(".selected");
-    const newSelection = document.getElementById(actionName);
-    const defaultImage = document.getElementById("sprite-normal");
-    
-    currentSelection.classList.remove("selected");
-    newSelection.classList.add("selected");
-    
-    testTimer = setTimeout(function () {newSelection.classList.toggle("selected"); defaultImage.classList.toggle("selected")}, 4000)
+      const replacementImage = document.getElementById(actionName);
+      
+      this.defaultImage.classList.remove("default");
+      if (currentImage) {
+        currentImage.classList.remove("selected");
+      }
+      replacementImage.classList.add("selected");
+    },
+    removeFlag: function(actionName) {
+      const currentImage = gameInterface.screen.querySelector(".selected");
+      
+      currentImage.classList.remove("selected");
+      this.defaultImage.classList.add("selected");
+    }
   }
   
   const findAction = (action, arrayName) => {
@@ -342,7 +300,7 @@
   gameAction[0].low.messages.push(new eventMessagePrototype("low 1", "Message 1"));
   gameAction[0].low.messages.push(new eventMessagePrototype("low 3", "Message 3"));
   gameAction[0].low.messages.push(new eventMessagePrototype("low 2", "Message 2"));
-  },
+},
   stop: function() {
     
   }
