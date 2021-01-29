@@ -86,16 +86,6 @@
     this.age = 0;
     // Generate a random life expectancy above 18 to 100:
     this.lifeExpectancy = Math.floor(Math.random() * (100-18) + 18 );
-    // this.moodTypes = ["sad", "neutral", "happy"];
-    // this.mood = 1;
-    // this.setMood = function() {
-    //   const happiness = findAction("happiness", gameAction);
-    //   const calc = Math.round(happiness.score / happiness.max * ( this.moodTypes.length -1));
-    //   // console.log (`calc: ${happiness}`);
-    //   console.log(happiness);
-    //   this.mood = calc;
-    //   console.log(`Happiness Score: ${calc}, Mood: ${this.moodTypes[this.mood]}`);
-    // }
     this.print = function() {
       gameInterface.info.querySelector("#pet-name p").textContent = this.name;
       gameInterface.info.querySelector("#pet-age p").textContent = this.age;
