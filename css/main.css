@@ -27,7 +27,7 @@ nav li {
 #pet .selected {
   display: initial;
   animation-name: image-pulse;
-  animation-duration: 4s;
+  animation-duration: 1s;
   animation-iteration-count: infinite;
 }
 
@@ -39,8 +39,4 @@ nav li {
 
 .hidden {
   display: none;
-}
-
-.happy {
-  background
 }

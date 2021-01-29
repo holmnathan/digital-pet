@@ -13,6 +13,7 @@ function eventMessagePrototype(title, message) {
 function actionPrototype(domElement) {
   this.domElement = domElement;
   this.dataset = domElement.dataset;
+  this.name = this.domElement.getAttribute("id")
   // The corresponding rating the action changes:
   this.change = this.dataset.change;
   // Maximum score:
@@ -36,6 +37,7 @@ function actionPrototype(domElement) {
   this.adjustScore = function(amount) { 
     this.score = handleSumLimit(this.score, amount, 0, this.max, false);
     this.print();
+    handlePetUi(`sprite-${this.name}`)
     // console.log(`Adjust Score: ${amount}, New ${this.change} Score: ${this.score}`);
   };
   this.selectToggle = function() {
@@ -53,7 +55,7 @@ function actionPrototype(domElement) {
         case 2:
           return this.high
       }
-    }
+    };
   }
 
 // ----- Pet Prototype -----
@@ -216,19 +218,24 @@ const handleButton = (e) => {
     case "select":
       gameAction[gameControl.selectedIndex].adjustScore(1);
       // gamePet.setMood();
-      for (let action of gameAction) {
-        handleAction(gameAction, action.isNeeded());
-      }
   }
 }
 
+let testTimer;
+
 // ----- Handle Pet User Interface -----
 // Display the pet's response on screen.
-const handlePetUi = (petClass) => {
-    gameInterface.screen.textContent = gamePet.moodTypes[gamePet.mood];
-  // const currentClass = gameInterface.screen.classList;
-  // gameInterface.screen.classList.remove(currentClass);
-  // gameInterface.screen.classList.add(petClass);
+const handlePetUi = (actionName) => {
+    // gameInterface.screen.textContent = gamePet.moodTypes[gamePet.mood];
+    clearTimeout(testTimer);
+  const currentSelection = gameInterface.screen.querySelector(".selected");
+  const newSelection = document.getElementById(actionName);
+  const defaultImage = document.getElementById("sprite-happy");
+  
+  currentSelection.classList.remove("selected");
+  newSelection.classList.add("selected");
+  
+  testTimer = setTimeout(function () {newSelection.classList.toggle("selected"); defaultImage.classList.toggle("selected")}, 4000)
 }
 
 const findAction = (action, arrayName) => {
@@ -307,12 +314,10 @@ document.querySelector("body").appendChild(testbutton4);
 
 testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
 testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
-testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1); for (let action of gameAction) {
-  handleAction(gameAction, action.isNeeded());
-}
+testbutton3.addEventListener("click", () => {gameAction[gameControl.selectedIndex].adjustScore(-1);
 });
 
-const healthTimer = setInterval(function() {findAction("health", gameAction).adjustScore(-1)}, findAction("health", gameAction).depletionRate * 30000);
-const happinessTimer = setInterval(function() {findAction("happiness", gameAction).adjustScore(-1)}, findAction("happiness", gameAction).depletionRate * 30000);
-const disciplineTimer = setInterval(function() {findAction("discipline", gameAction).adjustScore(-1)}, findAction("discipline", gameAction).depletionRate * 30000);
-const hungerTimer = setInterval(function() {findAction("hunger", gameAction).adjustScore(-1)}, findAction("hunger", gameAction).depletionRate * 30000);
+let healthTimer = setInterval(function() {findAction("health", gameAction).adjustScore(-1)}, findAction("health", gameAction).depletionRate * 30000);
+let happinessTimer = setInterval(function() {findAction("happiness", gameAction).adjustScore(-1)}, findAction("happiness", gameAction).depletionRate * 30000);
+let disciplineTimer = setInterval(function() {findAction("discipline", gameAction).adjustScore(-1)}, findAction("discipline", gameAction).depletionRate * 30000);
+let hungerTimer = setInterval(function() {findAction("hunger", gameAction).adjustScore(-1)}, findAction("hunger", gameAction).depletionRate * 30000);
