@@ -61,7 +61,6 @@ function actionPrototype(domElement) {
       }
     };
     this.alert = function(value) {
-      console.log(this)
       const randomInt = Math.floor(Math.random() * this[value].messages.length);
       const message = this[value].messages[randomInt];
       
@@ -86,11 +85,14 @@ function petPrototype(name) {
   //   this.mood = calc;
   //   console.log(`Happiness Score: ${calc}, Mood: ${this.moodTypes[this.mood]}`);
   // }
+  this.print = function() {
+    gameInterface.info.querySelector("#pet-name p").textContent = this.name;
+    gameInterface.info.querySelector("#pet-age p").textContent = this.age;
+  }
   this.adjustLife = (amount) => {
     this.lifeExpectancy = handleSumLimit(this.lifeExpectancy, amount, 1, 100, false);
-    console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
-  },
-  this.needs = [];
+    // console.log(`Adjust Life: ${amount}, New Life Expectancy: ${this.lifeExpectancy}`);
+  };
 }
 
 // Global Variables
@@ -260,6 +262,8 @@ const findAction = (action, arrayName) => {
 // Run Code
 // ============================================================================
 
+gamePet.print();
+
 const happy = document.getElementById("sprite-happy");
 const sad = document.getElementById("sprite-sad");
 
@@ -276,9 +280,10 @@ for (let button of gameControl.buttons) {
 // ----------------------------------------------------------------------------
 
 const globalTimerLogic = () => {
-  if (pet.stats.age < pet.stats.lifeExpectancy) {
-    console.log(pet.stats.age, pet.stats.lifeExpectancy);
-    pet.stats.age += 1
+  if (gamePet.age < gamePet.lifeExpectancy) {
+    console.log(gamePet.age, gamePet.lifeExpectancy);
+    gamePet.age += 1
+    gamePet.print();
   } else {
     clearInterval(globalTime);
     console.log("Game Over")
@@ -323,7 +328,7 @@ const showAlert = (alertType) => {
 // document.querySelector("body").appendChild(testbutton3);
 // document.querySelector("body").appendChild(testbutton4);
 // 
-// // const globalTime = setInterval(globalTimerLogic, 1000);
+const globalTime = setInterval(globalTimerLogic, 1000);
 // 
 // testbutton1.addEventListener("click", () => {gamePet.adjustLife(3)});
 // testbutton2.addEventListener("click", () => {gamePet.adjustLife(-10)});
